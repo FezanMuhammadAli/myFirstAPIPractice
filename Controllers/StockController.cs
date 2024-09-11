@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 // using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using myFirstAPI.Data;
+using myFirstAPI.Mappers;
 
 namespace myFirstAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace myFirstAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var stock= _context.Stocks.ToList();
+            var stock= _context.Stocks.ToList().Select(s=>s.ToStockDto());
             return Ok(stock);
         }
 
@@ -33,7 +34,7 @@ namespace myFirstAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(stock);
+            return Ok(stock.ToStockDto());
         }
     }
 }
