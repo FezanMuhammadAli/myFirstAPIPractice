@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using myFirstAPI.Data;
+using myFirstAPI.Mappers;
 
 namespace myFirstAPI.Controllers
 {
@@ -20,7 +21,7 @@ namespace myFirstAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var comment= _context.Comments.ToList();
+            var comment= _context.Comments.ToList().Select(s=>s.ToCommentDto());
             return Ok(comment);
         }
 
@@ -32,7 +33,7 @@ namespace myFirstAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(comment);
+            return Ok(comment.ToCommentDto());
         }
     }
 }
