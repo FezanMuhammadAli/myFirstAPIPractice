@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using myFirstAPI.Data;
+using myFirstAPI.DTOs.Comment;
 using myFirstAPI.Mappers;
 
 namespace myFirstAPI.Controllers
@@ -34,6 +35,14 @@ namespace myFirstAPI.Controllers
                 return NotFound();
             }
             return Ok(comment.ToCommentDto());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateCommentRequestDto commentDto){
+            var commentModel=commentDto.ToCommentFromCreateDTO();
+            _context.Comments.Add(commentModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById),new {id=commentModel.Id},commentModel.ToCommentDto());
         }
     }
 }
