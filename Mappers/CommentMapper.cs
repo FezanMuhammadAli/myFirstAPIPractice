@@ -25,7 +25,7 @@ namespace myFirstAPI.Mappers
                 StockId=commentDto.StockId,
                 Title=commentDto.Title,
                 Content=commentDto.Content,
-                CreatedOn=commentDto.CreatedOn
+                // CreatedOn=commentDto.CreatedOn
             };
         }
     }
