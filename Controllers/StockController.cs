@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 // using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using myFirstAPI.Data;
+using myFirstAPI.DTOs.Stock;
 using myFirstAPI.Mappers;
 
 namespace myFirstAPI.Controllers
@@ -35,6 +36,14 @@ namespace myFirstAPI.Controllers
                 return NotFound();
             }
             return Ok(stock.ToStockDto());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateStockRequestDto stockDto){
+            var stockModel=stockDto.ToStockFromCreateDTO();
+            _context.Stocks.Add(stockModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById),new {id=stockModel.Id},stockModel.ToStockDto());
         }
     }
 }
