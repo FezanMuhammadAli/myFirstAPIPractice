@@ -8,8 +8,8 @@ namespace myFirstAPI.DTOs.Comment
     public class CommentDto
     {
         public int? StockId { get; set; }
-        public string CommentTitle { get; set; } = string.Empty;
-        public string CommentContent { get; set; }=string.Empty;
-        public DateTime CommentCreatedOn { get; set; }=DateTime.Now;
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; }=string.Empty;
+        public DateTime CreatedOn { get; set; }=DateTime.Now;
     }
 }
