@@ -13,6 +13,7 @@ namespace myFirstAPI.Mappers
         public static CommentDto ToCommentDto(this Comment CommentModel){
             return new CommentDto{
                 StockId=CommentModel.StockId,
+                Id=CommentModel.Id,
                 Title=CommentModel.Title,
                 Content=CommentModel.Content,
                 CreatedOn=CommentModel.CreatedOn
