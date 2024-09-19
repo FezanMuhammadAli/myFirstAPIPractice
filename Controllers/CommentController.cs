@@ -45,6 +45,22 @@ namespace myFirstAPI.Controllers
             return CreatedAtAction(nameof(GetById),new {id=commentModel.Id},commentModel.ToCommentDto());
         }
 
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id,[FromBody] UpdateCommentRequestDto updateDto){
+            var commentModel=_context.Comments.FirstOrDefault(x=>x.Id==id);
+            if(commentModel==null){
+                return NotFound();
+            }
+            commentModel.StockId=updateDto.StockId;
+            commentModel.Content=updateDto.Content;
+            commentModel.Title=updateDto.Title;
+
+            _context.SaveChanges();
+            return Ok(commentModel.ToCommentDto());
+        }
+
+
         [HttpDelete("{id}")]
         // [Route("{id}")]
         public IActionResult Delete([FromRoute] int id){
