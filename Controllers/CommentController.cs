@@ -44,5 +44,17 @@ namespace myFirstAPI.Controllers
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById),new {id=commentModel.Id},commentModel.ToCommentDto());
         }
-    }
+
+        [HttpDelete("{id}")]
+        // [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id){
+            var commentModel=_context.Comments.FirstOrDefault(x=>x.Id==id);
+            if(commentModel==null){
+                return NotFound();
+            }
+            _context.Comments.Remove(commentModel);
+            _context.SaveChanges();
+            return Ok(commentModel.ToCommentDto());
+        }
+    }    
 }
