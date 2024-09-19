@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 // using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using myFirstAPI.Data;
 using myFirstAPI.DTOs.Stock;
 using myFirstAPI.Mappers;
@@ -45,5 +46,24 @@ namespace myFirstAPI.Controllers
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById),new {id=stockModel.Id},stockModel.ToStockDto());
         }
+
+        [HttpPut]
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto){
+            var stockModel=_context.Stocks.FirstOrDefault(x=>x.Id==id);
+            if(stockModel==null){
+                return NotFound();
+            }
+            stockModel.CompanyName=updateDto.CompanyName;
+            stockModel.Symbol=updateDto.Symbol;
+            stockModel.Purchase=updateDto.Purchase;
+            stockModel.LastDiv=updateDto.LastDiv;
+            stockModel.MarketCap=updateDto.MarketCap;
+
+            _context.SaveChanges();
+            return Ok(stockModel.ToStockDto());
+
+        }
+
     }
 }
