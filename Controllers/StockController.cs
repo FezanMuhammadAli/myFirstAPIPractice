@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 // using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using myFirstAPI.Data;
 using myFirstAPI.DTOs.Stock;
@@ -22,9 +23,10 @@ namespace myFirstAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var stock= _context.Stocks.ToList().Select(s=>s.ToStockDto());
+            var stock=await _context.Stocks.ToListAsync();
+            var stockDto=stock.Select(s=>s.ToStockDto());
             return Ok(stock);
         }
 

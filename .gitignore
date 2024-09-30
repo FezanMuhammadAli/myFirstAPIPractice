@@ -71,3 +71,6 @@ $RECYCLE.BIN/
 # Ignore JetBrains Rider IDE files
 .idea/
 .idea/*
+
+
+*.sln
