@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using myFirstAPI.Data;
 using myFirstAPI.DTOs.Comment;
 using myFirstAPI.Mappers;
@@ -20,16 +21,17 @@ namespace myFirstAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var comment= _context.Comments.ToList().Select(s=>s.ToCommentDto());
+            var comment=await _context.Comments.ToListAsync();
+            var commentDto=comment.Select(s=>s.ToCommentDto());
             return Ok(comment);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute]int id)
+        public async Task<IActionResult> GetById([FromRoute]int id)
         {
-            var comment= _context.Comments.Find(id);
+            var comment=await _context.Comments.FindAsync(id);
             if(comment==null)
             {
                 return NotFound();
@@ -38,17 +40,17 @@ namespace myFirstAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateCommentRequestDto commentDto){
+        public async Task<IActionResult> Create([FromBody] CreateCommentRequestDto commentDto){
             var commentModel=commentDto.ToCommentFromCreateDTO();
-            _context.Comments.Add(commentModel);
-            _context.SaveChanges();
+            await _context.Comments.AddAsync(commentModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById),new {id=commentModel.Id},commentModel.ToCommentDto());
         }
 
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody] UpdateCommentRequestDto updateDto){
-            var commentModel=_context.Comments.FirstOrDefault(x=>x.Id==id);
+        public async Task<IActionResult> Update(int id,[FromBody] UpdateCommentRequestDto updateDto){
+            var commentModel=await _context.Comments.FirstOrDefaultAsync(x=>x.Id==id);
             if(commentModel==null){
                 return NotFound();
             }
@@ -63,13 +65,13 @@ namespace myFirstAPI.Controllers
 
         [HttpDelete("{id}")]
         // [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id){
-            var commentModel=_context.Comments.FirstOrDefault(x=>x.Id==id);
+        public async Task<IActionResult> Delete([FromRoute] int id){
+            var commentModel=await _context.Comments.FirstOrDefaultAsync(x=>x.Id==id);
             if(commentModel==null){
                 return NotFound();
             }
             _context.Comments.Remove(commentModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(commentModel.ToCommentDto());
         }
     }    
