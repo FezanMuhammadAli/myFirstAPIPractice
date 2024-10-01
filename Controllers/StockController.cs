@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using myFirstAPI.Data;
 using myFirstAPI.DTOs.Stock;
+using myFirstAPI.Interface;
 using myFirstAPI.Mappers;
 
 namespace myFirstAPI.Controllers
@@ -17,15 +18,18 @@ namespace myFirstAPI.Controllers
     public class StockController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        public StockController(ApplicationDBContext context)
+        private readonly IStockRepository _stockRepo;
+
+        public StockController(ApplicationDBContext context,IStockRepository stockRepo)
         {
             _context=context;
+            _stockRepo=stockRepo;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var stock=await _context.Stocks.ToListAsync();
+            var stock=await _stockRepo.GetAllAsync();
             var stockDto=stock.Select(s=>s.ToStockDto());
             return Ok(stock);
         }
